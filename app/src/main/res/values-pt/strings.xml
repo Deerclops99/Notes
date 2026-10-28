@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Minhas Notas</string>
+
+    <!-- Abas -->
+    <string name="tab_notes">Notas</string>
+    <string name="tab_todos">Tarefas</string>
+    <string name="tab_settings">Ajustes</string>
+
+    <!-- Notas -->
+    <string name="notes_title_label">Título</string>
+    <string name="notes_content_label">Conteúdo</string>
+    <string name="notes_save">Salvar nota</string>
+    <string name="notes_empty">Ainda não há notas. Escreva a primeira!</string>
+    <string name="notes_delete">Excluir nota</string>
+    <string name="notes_new">Nova nota</string>
+    <string name="notes_delete_title">Excluir nota?</string>
+    <string name="notes_delete_message">\"%1$s\" será excluída permanentemente. Não é possível desfazer.</string>
+    <string name="notes_delete_confirm">Excluir</string>
+    <string name="notes_delete_cancel">Cancelar</string>
+    <string name="notes_delete_many_title">Excluir %1$d notas?</string>
+    <string name="notes_delete_many_message">As notas selecionadas serão excluídas permanentemente. Não é possível desfazer.</string>
+    <string name="todos_deleted">%1$d tarefas excluídas</string>
+
+    <!-- Tarefas -->
+    <string name="todo_new_label">Nova tarefa</string>
+    <string name="todo_add">Adicionar</string>
+    <string name="todo_delete">Excluir tarefa</string>
+    <string name="todo_permanent">Permanente (não é apagada ao limpar)</string>
+    <string name="todo_section_permanent">Permanentes</string>
+    <string name="todo_section_daily">Do dia</string>
+    <string name="todo_clear_done">Limpar as concluídas do dia</string>
+    <string name="todo_deleted">Tarefa excluída</string>
+    <string name="todo_undo">Desfazer</string>
+
+    <!-- Configurações -->
+    <string name="settings_theme">Tema</string>
+    <string name="theme_light">Claro</string>
+    <string name="theme_dark">Escuro</string>
+    <string name="settings_language">Idioma</string>
+    <string name="edit_cancel">Cancelar</string>
+    <string name="notes_save_changes">Salvar alterações</string>
+    <string name="todo_save">Salvar</string>
+    <string name="notes_edit">Editar nota</string>
+    <string name="todo_edit">Editar tarefa</string>
+
+    <!-- Widget -->
+    <string name="widget_title">Minhas tarefas</string>
+    <string name="widget_empty">Sem tarefas. Adicione uma pelo app.</string>
+    <string name="widget_description">Suas tarefas num relance</string>
+</resources>
+

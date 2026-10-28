@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mis Notas</string>
+
+    <!-- Pestañas -->
+    <string name="tab_notes">Notas</string>
+    <string name="tab_todos">Tareas</string>
+    <string name="tab_settings">Ajustes</string>
+
+    <!-- Notas -->
+    <string name="notes_title_label">Título</string>
+    <string name="notes_content_label">Contenido</string>
+    <string name="notes_save">Guardar nota</string>
+    <string name="notes_empty">Aún no hay notas. ¡Escribe la primera!</string>
+    <string name="notes_delete">Borrar nota</string>
+    <string name="notes_new">Nueva nota</string>
+    <string name="notes_delete_title">¿Borrar nota?</string>
+    <string name="notes_delete_message">Se borrará \"%1$s\" de forma permanente. No se puede deshacer.</string>
+    <string name="notes_delete_confirm">Borrar</string>
+    <string name="notes_delete_cancel">Cancelar</string>
+    <string name="notes_delete_many_title">¿Borrar %1$d notas?</string>
+    <string name="notes_delete_many_message">Las notas seleccionadas se borrarán de forma permanente. No se puede deshacer.</string>
+    <string name="todos_deleted">%1$d tareas borradas</string>
+
+    <!-- Tareas -->
+    <string name="todo_new_label">Nueva tarea</string>
+    <string name="todo_add">Agregar</string>
+    <string name="todo_delete">Borrar tarea</string>
+    <string name="todo_permanent">Permanente (no se borra al limpiar)</string>
+    <string name="todo_section_permanent">Permanentes</string>
+    <string name="todo_section_daily">Del día</string>
+    <string name="todo_clear_done">Limpiar las hechas del día</string>
+    <string name="todo_deleted">Tarea borrada</string>
+    <string name="todo_undo">Deshacer</string>
+
+    <!-- Ajustes -->
+    <string name="settings_theme">Tema</string>
+    <string name="theme_light">Claro</string>
+    <string name="theme_dark">Oscuro</string>
+    <string name="settings_language">Idioma</string>
+    <string name="edit_cancel">Cancelar</string>
+    <string name="notes_save_changes">Guardar cambios</string>
+    <string name="todo_save">Guardar</string>
+    <string name="notes_edit">Editar nota</string>
+    <string name="todo_edit">Editar tarea</string>
+
+    <!-- Widget -->
+    <string name="widget_title">Mis tareas</string>
+    <string name="widget_empty">Sin tareas. Agrega una desde la app.</string>
+    <string name="widget_description">Tus tareas de un vistazo</string>
+</resources>

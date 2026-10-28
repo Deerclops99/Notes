@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">My Notes</string>
+
+    <!-- Tabs -->
+    <string name="tab_notes">Notes</string>
+    <string name="tab_todos">Tasks</string>
+    <string name="tab_settings">Settings</string>
+
+    <!-- Notes -->
+    <string name="notes_title_label">Title</string>
+    <string name="notes_content_label">Content</string>
+    <string name="notes_save">Save note</string>
+    <string name="notes_empty">No notes yet. Write your first one!</string>
+    <string name="notes_delete">Delete note</string>
+    <string name="notes_new">New note</string>
+    <string name="notes_delete_title">Delete note?</string>
+    <string name="notes_delete_message">This will permanently delete \"%1$s\". It cannot be undone.</string>
+    <string name="notes_delete_confirm">Delete</string>
+    <string name="notes_delete_cancel">Cancel</string>
+    <string name="notes_delete_many_title">Delete %1$d notes?</string>
+    <string name="notes_delete_many_message">The selected notes will be permanently deleted. It cannot be undone.</string>
+    <string name="todos_deleted">%1$d tasks deleted</string>
+
+
+    <!-- Tasks -->
+    <string name="todo_new_label">New task</string>
+    <string name="todo_add">Add</string>
+    <string name="todo_delete">Delete task</string>
+    <string name="todo_permanent">Permanent (kept when clearing)</string>
+    <string name="todo_section_permanent">Permanent</string>
+    <string name="todo_section_daily">Daily</string>
+    <string name="todo_clear_done">Clear completed daily tasks</string>
+    <string name="todo_deleted">Task deleted</string>
+    <string name="todo_undo">Undo</string>
+
+    <!-- Settings -->
+    <string name="settings_theme">Theme</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="settings_language">Language</string>
+    <string name="lang_es" translatable="false">Español</string>
+    <string name="lang_en" translatable="false">English</string>
+    <string name="lang_pt" translatable="false">Português</string>
+    <string name="edit_cancel">Cancel</string>
+    <string name="notes_save_changes">Save changes</string>
+    <string name="todo_save">Save</string>
+    <string name="notes_edit">Edit note</string>
+    <string name="todo_edit">Edit task</string>
+
+    <!-- Widget -->
+    <string name="widget_title">My tasks</string>
+    <string name="widget_empty">No tasks. Add one from the app.</string>
+    <string name="widget_description">Your tasks at a glance</string>
+</resources>
