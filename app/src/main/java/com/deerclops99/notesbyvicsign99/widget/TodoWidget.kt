@@ -10,7 +10,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
-import androidx.glance.GlanceTheme
 import androidx.glance.LocalContext
 import androidx.glance.action.Action
 import androidx.glance.action.clickable
@@ -23,7 +22,7 @@ import androidx.glance.appwidget.lazy.items
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
 import androidx.glance.layout.Alignment
-import androidx.glance.layout.Box // CAMBIO: import nuevo
+import androidx.glance.layout.Box
 import androidx.glance.layout.Column
 import androidx.glance.layout.Row
 import androidx.glance.layout.Spacer
@@ -41,6 +40,8 @@ import com.deerclops99.notesbyvicsign99.R
 import com.deerclops99.notesbyvicsign99.data.AppDatabase
 import com.deerclops99.notesbyvicsign99.data.TodoItem
 import com.deerclops99.notesbyvicsign99.settings.AppLanguage
+import com.deerclops99.notesbyvicsign99.settings.AppTheme
+import com.deerclops99.notesbyvicsign99.settings.AppThemes
 
 private data class WidgetTexts(
     val title: String,
@@ -65,26 +66,32 @@ class TodoWidget : GlanceAppWidget() {
         val dao = AppDatabase.get(context).todoDao()
         val initialTodos = dao.getAll()
         val initialLang = AppLanguage.savedTag(context)
+        val initialTheme = AppThemes.selected(context)
 
         provideContent {
-            // Tareas e idioma se observan DENTRO del widget: se redibuja
-            // solo cuando cambian, aunque la sesión siga abierta
+            // Tareas, idioma y tema se observan DENTRO del widget: se
+            // redibuja solo cuando cambian, aunque la sesión siga abierta
             val todos by remember { dao.observeAll() }
                 .collectAsState(initial = initialTodos)
             val langTag by remember { AppLanguage.savedTagFlow(context) }
                 .collectAsState(initial = initialLang)
+            val appTheme by remember { AppThemes.selectedFlow(context) }
+                .collectAsState(initial = initialTheme)
             val texts = remember(langTag) { buildTexts(context, langTag) }
 
-            GlanceTheme {
-                TodoWidgetContent(todos, texts)
-            }
+            TodoWidgetContent(todos, texts, appTheme)
         }
     }
 }
 
 @Composable
-private fun TodoWidgetContent(todos: List<TodoItem>, texts: WidgetTexts) {
+private fun TodoWidgetContent(
+    todos: List<TodoItem>,
+    texts: WidgetTexts,
+    theme: AppTheme
+) {
     val context = LocalContext.current
+    val scheme = theme.colorScheme
     val permanent = todos.filter { it.permanent }
     val daily = todos.filter { !it.permanent }
 
@@ -97,18 +104,18 @@ private fun TodoWidgetContent(todos: List<TodoItem>, texts: WidgetTexts) {
     Column(
         modifier = GlanceModifier
             .fillMaxSize()
-            .background(GlanceTheme.colors.widgetBackground)
+            .background(ColorProvider(theme.widgetBody))
             .appWidgetBackground()
             .cornerRadius(16.dp)
             .clickable(openTasks)
     ) {
-        // ---------- Encabezado ----------
+        // ---------- Encabezado: color 1 con letras del color 3 ----------
         Row(
             modifier = GlanceModifier
                 .fillMaxWidth()
-                .background(GlanceTheme.colors.primary)
+                .background(ColorProvider(scheme.primary))
                 .padding(horizontal = 12.dp, vertical = 10.dp)
-                .clickable(openTasks), // CAMBIO: el encabezado se puede tocar
+                .clickable(openTasks),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
@@ -116,7 +123,7 @@ private fun TodoWidgetContent(todos: List<TodoItem>, texts: WidgetTexts) {
                 style = TextStyle(
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
-                    color = GlanceTheme.colors.onPrimary
+                    color = ColorProvider(scheme.onPrimary)
                 )
             )
         }
@@ -125,12 +132,14 @@ private fun TodoWidgetContent(todos: List<TodoItem>, texts: WidgetTexts) {
         if (todos.isEmpty()) {
             Text(
                 text = texts.empty,
-                style = TextStyle(color = GlanceTheme.colors.onSurfaceVariant),
+                style = TextStyle(
+                    color = ColorProvider(scheme.onSurfaceVariant)
+                ),
                 modifier = GlanceModifier.padding(12.dp)
             )
         } else {
-            // CAMBIO: la lista va dentro de un Box. Encima de ella hay una
-            // capa transparente que recibe todos los toques
+            // La lista abajo y encima una capa transparente que recibe
+            // todos los toques y abre la app en Tareas
             Box(
                 modifier = GlanceModifier
                     .fillMaxWidth()
@@ -138,31 +147,18 @@ private fun TodoWidgetContent(todos: List<TodoItem>, texts: WidgetTexts) {
             ) {
                 LazyColumn(modifier = GlanceModifier.fillMaxSize()) {
                     if (permanent.isNotEmpty()) {
-                        item {
-                            SectionTitle(
-                                texts.permanent,
-                                GlanceTheme.colors.primary,
-                                openTasks
-                            )
-                        }
+                        item { SectionLabel(texts.permanent, theme, openTasks) }
                         items(permanent, itemId = { it.id }) {
-                            TodoRow(it, openTasks)
+                            TodoRow(it, theme, openTasks)
                         }
                     }
                     if (daily.isNotEmpty()) {
-                        item {
-                            SectionTitle(
-                                texts.daily,
-                                GlanceTheme.colors.secondary,
-                                openTasks
-                            )
-                        }
+                        item { SectionLabel(texts.daily, theme, openTasks) }
                         items(daily, itemId = { it.id }) {
-                            TodoRow(it, openTasks)
+                            TodoRow(it, theme, openTasks)
                         }
                     }
                 }
-                // CAMBIO: la capa transparente
                 Spacer(
                     modifier = GlanceModifier
                         .fillMaxSize()
@@ -173,34 +169,41 @@ private fun TodoWidgetContent(todos: List<TodoItem>, texts: WidgetTexts) {
     }
 }
 
+// Etiqueta "Permanentes" / "Del día": rellena con el color 1
 @Composable
-private fun SectionTitle(text: String, color: ColorProvider, onClick: Action) {
-    Text(
-        text = text,
-        style = TextStyle(
-            fontWeight = FontWeight.Medium,
-            fontSize = 12.sp,
-            color = color
-        ),
+private fun SectionLabel(text: String, theme: AppTheme, onClick: Action) {
+    Row(
         modifier = GlanceModifier
             .fillMaxWidth()
             .padding(start = 12.dp, end = 12.dp, top = 10.dp, bottom = 2.dp)
             .clickable(onClick)
-    )
+    ) {
+        Text(
+            text = text,
+            style = TextStyle(
+                fontWeight = FontWeight.Medium,
+                fontSize = 12.sp,
+                color = ColorProvider(theme.pillText)
+            ),
+            modifier = GlanceModifier
+                .background(ColorProvider(theme.colorScheme.primary))
+                .cornerRadius(12.dp)
+                .padding(horizontal = 10.dp, vertical = 3.dp)
+        )
+    }
 }
 
 @Composable
-private fun TodoRow(item: TodoItem, onClick: Action) {
-    val textColor = if (item.done) {
-        GlanceTheme.colors.onSurfaceVariant
-    } else {
-        GlanceTheme.colors.onSurface
-    }
+private fun TodoRow(item: TodoItem, theme: AppTheme, onClick: Action) {
+    val scheme = theme.colorScheme
+    val textColor = ColorProvider(
+        if (item.done) scheme.onSurfaceVariant else scheme.onSurface
+    )
 
     Row(
         modifier = GlanceModifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 1.dp)
+            .padding(horizontal = 12.dp, vertical = 2.dp)
             .clickable(onClick)
     ) {
         Text(

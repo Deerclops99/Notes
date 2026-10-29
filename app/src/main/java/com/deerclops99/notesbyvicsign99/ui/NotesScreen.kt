@@ -15,12 +15,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -32,12 +32,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.deerclops99.notesbyvicsign99.R
 import com.deerclops99.notesbyvicsign99.data.Note
+import com.deerclops99.notesbyvicsign99.ui.theme.DialogCancelButton
+import com.deerclops99.notesbyvicsign99.ui.theme.appTextFieldColors
 import kotlinx.coroutines.delay
 
 @Composable
@@ -95,6 +98,15 @@ private fun NoteCard(
     onLongClick: (Note) -> Unit
 ) {
     val haptic = LocalHapticFeedback.current
+    val scheme = MaterialTheme.colorScheme
+
+    // Fondo de las notas = color 2 del tema; seleccionada = un poco más
+    // marcada y con borde
+    val container = if (selected) {
+        lerp(scheme.secondaryContainer, scheme.primary, 0.25f)
+    } else {
+        scheme.secondaryContainer
+    }
 
     Card(
         modifier = Modifier
@@ -106,18 +118,11 @@ private fun NoteCard(
                     onLongClick(note)
                 }
             ),
-        colors = if (selected) {
-            CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.secondaryContainer
-            )
-        } else {
-            CardDefaults.cardColors()
-        },
-        border = if (selected) {
-            BorderStroke(2.dp, MaterialTheme.colorScheme.primary)
-        } else {
-            null
-        }
+        colors = CardDefaults.cardColors(
+            containerColor = container,
+            contentColor = scheme.onSecondaryContainer
+        ),
+        border = if (selected) BorderStroke(2.dp, scheme.primary) else null
     ) {
         Column(
             modifier = Modifier
@@ -168,6 +173,7 @@ fun NoteDialog(
                     onValueChange = { title = it },
                     label = { Text(stringResource(R.string.notes_title_label)) },
                     singleLine = true,
+                    colors = appTextFieldColors(),
                     modifier = Modifier
                         .fillMaxWidth()
                         .focusRequester(titleFocus)
@@ -180,12 +186,13 @@ fun NoteDialog(
                         Text(stringResource(R.string.notes_content_label))
                     },
                     minLines = 3,
+                    colors = appTextFieldColors(),
                     modifier = Modifier.fillMaxWidth()
                 )
             }
         },
         confirmButton = {
-            TextButton(
+            Button(
                 onClick = { onSave(title.trim(), content.trim()) },
                 enabled = title.isNotBlank()
             ) {
@@ -201,9 +208,10 @@ fun NoteDialog(
             }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text(stringResource(R.string.edit_cancel))
-            }
+            DialogCancelButton(
+                stringResource(R.string.edit_cancel),
+                onDismiss
+            )
         }
     )
 }

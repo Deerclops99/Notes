@@ -5,8 +5,12 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import com.deerclops99.notesbyvicsign99.settings.AppLanguage
+import com.deerclops99.notesbyvicsign99.settings.AppThemes
 import com.deerclops99.notesbyvicsign99.ui.AppRoot
 import com.deerclops99.notesbyvicsign99.ui.theme.NotesTheme
 
@@ -27,7 +31,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         setContent {
-            NotesTheme {
+            val appTheme by remember { AppThemes.selectedFlow(this) }
+                .collectAsState(initial = AppThemes.selected(this))
+
+            NotesTheme(appTheme = appTheme) {
                 AppRoot(
                     requestedTab = requestedTab.value,
                     onTabRequestHandled = { requestedTab.value = null }

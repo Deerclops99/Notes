@@ -3,6 +3,7 @@ package com.deerclops99.notesbyvicsign99.ui
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -14,9 +15,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -24,7 +27,6 @@ import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -37,7 +39,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
@@ -45,6 +46,9 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.deerclops99.notesbyvicsign99.R
 import com.deerclops99.notesbyvicsign99.data.TodoItem
+import com.deerclops99.notesbyvicsign99.ui.theme.DialogCancelButton
+import com.deerclops99.notesbyvicsign99.ui.theme.appTextFieldColors
+import com.deerclops99.notesbyvicsign99.ui.theme.pillTextColor
 import kotlinx.coroutines.delay
 
 @Composable
@@ -63,9 +67,9 @@ fun TodoScreen(
 
     Column(modifier = Modifier.fillMaxSize()) {
         if (hasDoneDaily) {
-            TextButton(
+            Button(
                 onClick = onClearDone,
-                modifier = Modifier.padding(start = 8.dp, top = 4.dp)
+                modifier = Modifier.padding(start = 16.dp, top = 8.dp)
             ) {
                 Text(stringResource(R.string.todo_clear_done))
             }
@@ -83,9 +87,8 @@ fun TodoScreen(
         ) {
             if (permanentItems.isNotEmpty()) {
                 item(key = "header_permanent") {
-                    SectionHeader(
-                        text = stringResource(R.string.todo_section_permanent),
-                        color = MaterialTheme.colorScheme.primary
+                    SectionLabel(
+                        stringResource(R.string.todo_section_permanent)
                     )
                 }
                 items(permanentItems, key = { it.id }) { item ->
@@ -101,9 +104,8 @@ fun TodoScreen(
             }
             if (dailyItems.isNotEmpty()) {
                 item(key = "header_daily") {
-                    SectionHeader(
-                        text = stringResource(R.string.todo_section_daily),
-                        color = MaterialTheme.colorScheme.secondary
+                    SectionLabel(
+                        stringResource(R.string.todo_section_daily)
                     )
                 }
                 items(dailyItems, key = { it.id }) { item ->
@@ -121,14 +123,24 @@ fun TodoScreen(
     }
 }
 
+// Etiqueta rellena con el color principal del tema
 @Composable
-private fun SectionHeader(text: String, color: Color) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.titleSmall,
-        color = color,
-        modifier = Modifier.padding(top = 12.dp, bottom = 4.dp)
-    )
+private fun SectionLabel(text: String) {
+    Box(
+        modifier = Modifier
+            .padding(top = 12.dp, bottom = 4.dp)
+            .background(
+                color = MaterialTheme.colorScheme.primary,
+                shape = RoundedCornerShape(50)
+            )
+            .padding(horizontal = 12.dp, vertical = 3.dp)
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.titleSmall,
+            color = pillTextColor()
+        )
+    }
 }
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
@@ -236,6 +248,7 @@ fun TodoDialog(
                     onValueChange = { text = it },
                     label = { Text(stringResource(R.string.todo_new_label)) },
                     singleLine = true,
+                    colors = appTextFieldColors(),
                     modifier = Modifier
                         .fillMaxWidth()
                         .focusRequester(fieldFocus)
@@ -250,7 +263,7 @@ fun TodoDialog(
             }
         },
         confirmButton = {
-            TextButton(
+            Button(
                 onClick = { onSave(text.trim(), permanent) },
                 enabled = text.isNotBlank()
             ) {
@@ -262,9 +275,10 @@ fun TodoDialog(
             }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text(stringResource(R.string.edit_cancel))
-            }
+            DialogCancelButton(
+                stringResource(R.string.edit_cancel),
+                onDismiss
+            )
         }
     )
 }

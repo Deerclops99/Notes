@@ -43,6 +43,20 @@
     <string name="todo_save">Salvar</string>
     <string name="notes_edit">Editar nota</string>
     <string name="todo_edit">Editar tarefa</string>
+    <string name="theme_orange">Laranja</string>
+    <string name="theme_grape">Uva</string>
+    <string name="theme_coconut">Coco</string>
+    <string name="theme_strawberry">Morango</string>
+    <string name="theme_watermelon">Melancia</string>
+    <string name="theme_lemon">Limão</string>
+    <string name="theme_blueberry">Mirtilo</string>
+    <string name="theme_mango">Manga</string>
+    <string name="theme_peach">Pêssego</string>
+    <string name="theme_kiwi">Kiwi</string>
+    <string name="theme_locked_title">Tema bloqueado</string>
+    <string name="theme_locked_message">Assista a um anúncio para desbloquear o tema %1$s.</string>
+    <string name="theme_watch_ad">Ver anúncio</string>
+    <string name="theme_ad_soon">Em breve você poderá desbloquear temas com anúncios.</string>
 
     <!-- Widget -->
     <string name="widget_title">Minhas tarefas</string>

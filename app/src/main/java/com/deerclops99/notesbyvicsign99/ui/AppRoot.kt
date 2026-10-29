@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -26,7 +27,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -41,6 +41,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.deerclops99.notesbyvicsign99.R
+import com.deerclops99.notesbyvicsign99.ui.theme.DialogCancelButton
 import kotlinx.coroutines.launch
 
 // Marca o desmarca un id dentro de la selección
@@ -111,7 +112,11 @@ fun AppRoot(
         topBar = {
             Column(modifier = Modifier.statusBarsPadding()) {
                 // Acá puede ir el banner de anuncios más adelante
-                PrimaryTabRow(selectedTabIndex = page) {
+                PrimaryTabRow(
+                    selectedTabIndex = page,
+                    containerColor = MaterialTheme.colorScheme.background,
+                    contentColor = MaterialTheme.colorScheme.onBackground
+                ) {
                     tabTitles.forEachIndexed { index, title ->
                         Tab(
                             selected = page == index,
@@ -184,12 +189,12 @@ fun AppRoot(
                     containerColor = if (selecting) {
                         MaterialTheme.colorScheme.errorContainer
                     } else {
-                        MaterialTheme.colorScheme.primaryContainer
+                        MaterialTheme.colorScheme.primary
                     },
                     contentColor = if (selecting) {
                         MaterialTheme.colorScheme.onErrorContainer
                     } else {
-                        MaterialTheme.colorScheme.onPrimaryContainer
+                        MaterialTheme.colorScheme.onPrimary
                     }
                 ) {
                     Crossfade(targetState = selecting, label = "fab_icon") {
@@ -290,7 +295,7 @@ fun AppRoot(
                 )
             },
             confirmButton = {
-                TextButton(
+                Button(
                     onClick = {
                         confirmDeleteNotes = false
                         selectedNotes = emptySet()
@@ -301,9 +306,9 @@ fun AppRoot(
                 }
             },
             dismissButton = {
-                TextButton(onClick = { confirmDeleteNotes = false }) {
-                    Text(stringResource(R.string.notes_delete_cancel))
-                }
+                DialogCancelButton(
+                    stringResource(R.string.notes_delete_cancel)
+                ) { confirmDeleteNotes = false }
             }
         )
     }
