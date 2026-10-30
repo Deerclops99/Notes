@@ -14,6 +14,11 @@ import com.deerclops99.notesbyvicsign99.R
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import androidx.glance.appwidget.updateAll
+import com.deerclops99.notesbyvicsign99.widget.TodoWidget
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 // Interruptores para probar mientras todavía no hay anuncios reales
 object ThemeDev {
@@ -201,8 +206,12 @@ object AppThemes {
     }
 
     fun select(context: Context, theme: AppTheme) {
-        prefs(context).edit().putString(KEY_THEME, theme.id).apply()
-        applyNightMode(theme)
+    val app = context.applicationContext
+    prefs(app).edit().putString(KEY_THEME, theme.id).apply()
+    applyNightMode(theme)
+    CoroutineScope(Dispatchers.Default).launch {
+        TodoWidget().updateAll(app)
+    }
     }
 
     // Se llama cuando el usuario completa el anuncio
