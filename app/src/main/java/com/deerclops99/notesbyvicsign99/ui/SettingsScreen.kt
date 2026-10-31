@@ -39,6 +39,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.material3.TextButton
 import com.deerclops99.notesbyvicsign99.R
 import com.deerclops99.notesbyvicsign99.settings.AppLang
 import com.deerclops99.notesbyvicsign99.settings.AppLanguage
@@ -46,6 +50,9 @@ import com.deerclops99.notesbyvicsign99.settings.AppTheme
 import com.deerclops99.notesbyvicsign99.settings.AppThemes
 import com.deerclops99.notesbyvicsign99.settings.ThemeDev
 import com.deerclops99.notesbyvicsign99.ui.theme.DialogCancelButton
+
+private const val PRIVACY_POLICY_URL =
+    "https://sweetyani.com.uy/politica-privacidad"
 
 @Composable
 fun SettingsScreen(onLanguageChanged: () -> Unit) {
@@ -102,6 +109,21 @@ fun SettingsScreen(onLanguageChanged: () -> Unit) {
                     }
                 }
             )
+        }
+
+                Spacer(Modifier.height(16.dp))
+
+        // ---------- Política de privacidad ----------
+        TextButton(
+            onClick = {
+                val intent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse(PRIVACY_POLICY_URL)
+                )
+                context.startActivity(intent)
+            }
+        ) {
+            Text(stringResource(R.string.settings_privacy_policy))
         }
 
         // Espacio al final para que nada quede tapado
@@ -206,15 +228,14 @@ private fun ThemeRow(
         )
         Spacer(Modifier.width(8.dp))
         // Fondo, color 1 y color 2 del tema
-        theme.swatches.forEach { color ->
-            Dot(color)
-            Spacer(Modifier.width(4.dp))
-        }
+        Text(text = stringResource(theme.nameRes))
         Spacer(Modifier.width(8.dp))
         Text(
-            text = stringResource(theme.nameRes),
-            modifier = Modifier.weight(1f)
-        )
+          text = theme.emoji,
+          fontSize = 24.sp
+          )
+        Spacer(Modifier.weight(1f))
+
         if (locked) {
             Icon(
                 imageVector = Icons.Default.Lock,

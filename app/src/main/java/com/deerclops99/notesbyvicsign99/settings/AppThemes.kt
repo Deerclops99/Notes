@@ -19,14 +19,16 @@ import com.deerclops99.notesbyvicsign99.widget.TodoWidget
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import com.deerclops99.notesbyvicsign99.BuildConfig
 
 // Interruptores para probar mientras todavía no hay anuncios reales
 object ThemeDev {
-    // true = "Ver anuncio" desbloquea al instante (simula el anuncio)
-    const val SIMULATE_AD = true
+    // true solo en builds de debug (los de Android Studio). En una versión
+    // publicada (release) es false: "Ver anuncio" no desbloquea nada
+    val SIMULATE_AD: Boolean = BuildConfig.DEBUG
 
     // true = cada vez que se abre la app, los temas vuelven a bloquearse
-    const val RELOCK_ON_START = false
+    val RELOCK_ON_START: Boolean = true
 
     // false = colores exactos de tu lista: las letras sobre el color 1 son
     //         siempre el color 3.
@@ -38,6 +40,7 @@ object ThemeDev {
 class AppTheme(
     val id: String,
     @StringRes val nameRes: Int,
+    val emoji: String,
     private val color1: Color,   // principal
     private val color2: Color,   // secundario
     private val color3: Color,   // fondo
@@ -134,52 +137,52 @@ object AppThemes {
     // ---- TUS TEMAS: el orden de acá es el orden en Ajustes ----
     // Los 3 primeros son gratis; el primero es el tema por defecto
     val all: List<AppTheme> = listOf(
-        AppTheme(
-            "orange", R.string.theme_orange,
-            Color(0xFFF28C28), Color(0xFFFFD08A), Color(0xFFFFF4E5),
-            free = true
-        ),
-        AppTheme(
-            "grape", R.string.theme_grape,
-            Color(0xFF8250A5), Color(0xFFC6A5E2), Color(0xFFF6EEFC),
-            dark = true, free = true
-        ),
-        AppTheme(
-            "coconut", R.string.theme_coconut,
-            Color(0xFF96765A), Color(0xFFD8C7AD), Color(0xFFFAF7F0),
-            free = true
-        ),
-        AppTheme(
-            "strawberry", R.string.theme_strawberry,
-            Color(0xFFE94358), Color(0xFFFFB6B9), Color(0xFFFFF0F0)
-        ),
-        AppTheme(
-            "watermelon", R.string.theme_watermelon,
-            Color(0xFF26966A), Color(0xFFF56F79), Color(0xFFE6F5EC),
-            widgetUsesColor2 = true
-        ),
-        AppTheme(
-            "lemon", R.string.theme_lemon,
-            Color(0xFFD4B800), Color(0xFFF5E66B), Color(0xFFFFFCE5)
-        ),
-        AppTheme(
-            "blueberry", R.string.theme_blueberry,
-            Color(0xFF4D5BC7), Color(0xFFAEB8F2), Color(0xFFF0F1FF)
-        ),
-        AppTheme(
-            "mango", R.string.theme_mango,
-            Color(0xFFFFB52E), Color(0xFFFF7657), Color(0xFFFFF3D7),
-            widgetUsesColor2 = true
-        ),
-        AppTheme(
-            "peach", R.string.theme_peach,
-            Color(0xFFE994B8), Color(0xFFF8C9D9), Color(0xFFFFF1F6)
-        ),
-        AppTheme(
-            "kiwi", R.string.theme_kiwi,
-            Color(0xFF71983D), Color(0xFFB9D77E), Color(0xFFF1F7E5)
-        )
+    AppTheme(
+        "orange", R.string.theme_orange, "🍊",
+        Color(0xFFF28C28), Color(0xFFFFD08A), Color(0xFFFFF4E5),
+        free = true
+    ),
+    AppTheme(
+        "grape", R.string.theme_grape, "🍇",
+        Color(0xFF8250A5), Color(0xFFC6A5E2), Color(0xFFF6EEFC),
+        dark = true, free = true
+    ),
+    AppTheme(
+        "coconut", R.string.theme_coconut, "🥥",
+        Color(0xFF96765A), Color(0xFFD8C7AD), Color(0xFFFAF7F0),
+        free = true
+    ),
+    AppTheme(
+        "strawberry", R.string.theme_strawberry, "🍓",
+        Color(0xFFE94358), Color(0xFFFFB6B9), Color(0xFFFFF0F0)
+    ),
+    AppTheme(
+        "watermelon", R.string.theme_watermelon, "🍉",
+        Color(0xFF26966A), Color(0xFFF56F79), Color(0xFFE6F5EC),
+        widgetUsesColor2 = true
+    ),
+    AppTheme(
+        "lemon", R.string.theme_lemon, "🍋",
+        Color(0xFFD4B800), Color(0xFFF5E66B), Color(0xFFFFFCE5)
+    ),
+    AppTheme(
+        "blueberry", R.string.theme_blueberry, "🫐",
+        Color(0xFF4D5BC7), Color(0xFFAEB8F2), Color(0xFFF0F1FF)
+    ),
+    AppTheme(
+        "mango", R.string.theme_mango, "🥭",
+        Color(0xFFFFB52E), Color(0xFFFF7657), Color(0xFFFFF3D7),
+        widgetUsesColor2 = true
+    ),
+    AppTheme(
+        "peach", R.string.theme_peach, "🍑",
+        Color(0xFFE994B8), Color(0xFFF8C9D9), Color(0xFFFFF1F6)
+    ),
+    AppTheme(
+        "kiwi", R.string.theme_kiwi, "🥝",
+        Color(0xFF71983D), Color(0xFFB9D77E), Color(0xFFF1F7E5)
     )
+  )
 
     private const val PREFS = "settings"
     private const val KEY_THEME = "theme_id"
