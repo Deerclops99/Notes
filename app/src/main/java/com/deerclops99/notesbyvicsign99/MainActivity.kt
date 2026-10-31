@@ -9,6 +9,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import com.google.android.gms.ads.MobileAds
 import com.deerclops99.notesbyvicsign99.settings.AppLanguage
 import com.deerclops99.notesbyvicsign99.settings.AppThemes
 import com.deerclops99.notesbyvicsign99.ui.AppRoot
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         AppLanguage.syncFromSystem(this)
         enableEdgeToEdge()
+        Thread { MobileAds.initialize(this) {} }.start()
 
         // Solo en un arranque nuevo: si la pantalla se recrea (por cambiar
         // idioma o tema), no volvemos a saltar a Tareas

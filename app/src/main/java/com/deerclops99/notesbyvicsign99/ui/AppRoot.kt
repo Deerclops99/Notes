@@ -94,6 +94,7 @@ fun AppRoot(
     )
 
     val deletedOne = stringResource(R.string.todo_deleted)
+    val deletedManyFormat = stringResource(R.string.todos_deleted)
     val undoLabel = stringResource(R.string.todo_undo)
 
     // ¿Hay algo seleccionado en la pestaña actual?
@@ -111,7 +112,7 @@ fun AppRoot(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             Column(modifier = Modifier.statusBarsPadding()) {
-                // Acá puede ir el banner de anuncios más adelante
+                AdBanner()
                 PrimaryTabRow(
                     selectedTabIndex = page,
                     containerColor = MaterialTheme.colorScheme.background,
@@ -154,10 +155,7 @@ fun AppRoot(
                                     val message = if (toDelete.size == 1) {
                                         deletedOne
                                     } else {
-                                        context.getString(
-                                            R.string.todos_deleted,
-                                            toDelete.size
-                                        )
+                                        deletedManyFormat.format(toDelete.size)
                                     }
                                     scope.launch {
                                         snackbarHostState

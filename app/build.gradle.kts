@@ -21,12 +21,18 @@ android {
     }
 
     buildTypes {
-        release {
-            optimization {
-                enable = true
-                packageScope = setOf("androidx.**", "kotlin.**", "kotlinx.**")
-            }
+    debug {
+        manifestPlaceholders["admobAppId"] = "ca-app-pub-3940256099942544~3347511713"
+        buildConfigField("String", "ADMOB_BANNER_ID", "\"ca-app-pub-3940256099942544/9214589741\"")
+    }
+    release {
+        manifestPlaceholders["admobAppId"] = "ca-app-pub-7680074184799717~5179790931"
+        buildConfigField("String", "ADMOB_BANNER_ID", "\"ca-app-pub-7680074184799717/4190590003\"")
+        optimization {
+            enable = true
+            packageScope = setOf("androidx.**", "kotlin.**", "kotlinx.**")
         }
+    }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -65,4 +71,6 @@ dependencies {
     // Glance: widgets con sintaxis tipo Compose
     implementation("androidx.glance:glance-appwidget:1.1.1")
     implementation("androidx.glance:glance-material3:1.1.1")
+    // AdMob
+    implementation("com.google.android.gms:play-services-ads:24.4.0")
 }
