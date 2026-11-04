@@ -21,14 +21,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.deerclops99.notesbyvicsign99.BuildConfig
 
-// Interruptores para probar mientras todavía no hay anuncios reales
+// Interruptor de desarrollo
 object ThemeDev {
-    // true solo en builds de debug (los de Android Studio). En una versión
-    // publicada (release) es false: "Ver anuncio" no desbloquea nada
-    val SIMULATE_AD: Boolean = BuildConfig.DEBUG
+    // CAMBIÁ SOLO ESTO:
+    //   true  = modo prueba: los temas se vuelven a bloquear en cada arranque
+    //   false = versión final: los desbloqueos son permanentes
+    private const val TESTING = false
 
-    // true = cada vez que se abre la app, los temas vuelven a bloquearse
-    val RELOCK_ON_START: Boolean = true
+    // Se bloquea al arrancar solo si estás probando Y es un build de debug.
+    // Aunque olvides cambiar TESTING, en la versión publicada (release)
+    // los desbloqueos igual serán permanentes.
+    val RELOCK_ON_START: Boolean = TESTING && BuildConfig.DEBUG
 
     // false = colores exactos de tu lista: las letras sobre el color 1 son
     //         siempre el color 3.
@@ -39,7 +42,7 @@ object ThemeDev {
 
 class AppTheme(
     val id: String,
-    @StringRes val nameRes: Int,
+    @param:StringRes val nameRes: Int,
     val emoji: String,
     private val color1: Color,   // principal
     private val color2: Color,   // secundario

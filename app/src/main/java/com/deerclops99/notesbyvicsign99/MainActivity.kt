@@ -14,6 +14,7 @@ import com.deerclops99.notesbyvicsign99.settings.AppLanguage
 import com.deerclops99.notesbyvicsign99.settings.AppThemes
 import com.deerclops99.notesbyvicsign99.ui.AppRoot
 import com.deerclops99.notesbyvicsign99.ui.theme.NotesTheme
+import com.deerclops99.notesbyvicsign99.ui.RewardedAds
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,7 +25,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         AppLanguage.syncFromSystem(this)
         enableEdgeToEdge()
-        Thread { MobileAds.initialize(this) {} }.start()
+        Thread {
+           MobileAds.initialize(this) {
+           runOnUiThread { RewardedAds.preload(this) }
+           }
+        }.start()
 
         // Solo en un arranque nuevo: si la pantalla se recrea (por cambiar
         // idioma o tema), no volvemos a saltar a Tareas

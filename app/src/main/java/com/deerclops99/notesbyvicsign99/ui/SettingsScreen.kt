@@ -43,12 +43,12 @@ import androidx.compose.ui.unit.sp
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.material3.TextButton
+import android.widget.Toast
 import com.deerclops99.notesbyvicsign99.R
 import com.deerclops99.notesbyvicsign99.settings.AppLang
 import com.deerclops99.notesbyvicsign99.settings.AppLanguage
 import com.deerclops99.notesbyvicsign99.settings.AppTheme
 import com.deerclops99.notesbyvicsign99.settings.AppThemes
-import com.deerclops99.notesbyvicsign99.settings.ThemeDev
 import com.deerclops99.notesbyvicsign99.ui.theme.DialogCancelButton
 
 private const val PRIVACY_POLICY_URL =
@@ -130,36 +130,45 @@ fun SettingsScreen(onLanguageChanged: () -> Unit) {
         Spacer(Modifier.height(24.dp))
     }
 
-    // ---------- Aviso de tema bloqueado ----------
-    lockedTheme?.let { theme ->
+        // ---------- Aviso de tema bloqueado ----------
+        lockedTheme?.let { theme ->
         val themeName = stringResource(theme.nameRes)
+        val adUnavailable = stringResource(R.string.ad_unavailable)
+        val activity = context.findActivity()
+
         AlertDialog(
             onDismissRequest = { lockedTheme = null },
             title = { Text(stringResource(R.string.theme_locked_title)) },
             text = {
-                Text(
-                    if (ThemeDev.SIMULATE_AD) {
-                        stringResource(R.string.theme_locked_message, themeName)
-                    } else {
-                        stringResource(R.string.theme_ad_soon)
-                    }
-                )
+                Text(stringResource(R.string.theme_locked_message, themeName))
             },
             confirmButton = {
-                if (ThemeDev.SIMULATE_AD) {
-                    Button(
-                        onClick = {
-                            // AQUÍ irá el anuncio real: mostrarlo y, cuando
-                            // el usuario lo complete, ejecutar lo de abajo
-                            AppThemes.unlock(context, theme)
-                            unlocked = AppThemes.unlockedIds(context)
-                            AppThemes.select(context, theme)
-                            selectedId = theme.id
-                            lockedTheme = null
+                Button(
+                    onClick = {
+                        lockedTheme = null
+                        if (activity == null) {
+                            Toast.makeText(
+                                context, adUnavailable, Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            RewardedAds.show(
+                                activity = activity,
+                                onReward = {
+                                    AppThemes.unlock(context, theme)
+                                    unlocked = AppThemes.unlockedIds(context)
+                                    AppThemes.select(context, theme)
+                                    selectedId = theme.id
+                                },
+                                onUnavailable = {
+                                    Toast.makeText(
+                                        context, adUnavailable, Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            )
                         }
-                    ) {
-                        Text(stringResource(R.string.theme_watch_ad))
                     }
+                ) {
+                    Text(stringResource(R.string.theme_watch_ad))
                 }
             },
             dismissButton = {
