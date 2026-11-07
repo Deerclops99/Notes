@@ -5,13 +5,13 @@ plugins {
 }
 
 android {
-    namespace = "com.deerclops99.notesbyvicsign99"
+    namespace = "com.sweetyani.misnotas"
     compileSdk {
         version = release(37)
     }
 
     defaultConfig {
-        applicationId = "com.deerclops99.notesbyvicsign99"
+        applicationId = "com.sweetyani.misnotas"
         minSdk = 26
         targetSdk = 37
         versionCode = 1
