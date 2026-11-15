@@ -14,8 +14,8 @@ android {
         applicationId = "com.sweetyani.misnotas"
         minSdk = 26
         targetSdk = 37
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -26,17 +26,20 @@ android {
         buildConfigField("String", "ADMOB_BANNER_ID", "\"ca-app-pub-3940256099942544/9214589741\"")
         buildConfigField("String", "ADMOB_REWARDED_ID", "\"ca-app-pub-3940256099942544/5224354917\"")
     }
-    release {
-        manifestPlaceholders["admobAppId"] = "ca-app-pub-7680074184799717~5179790931"
-        buildConfigField("String", "ADMOB_BANNER_ID", "\"ca-app-pub-7680074184799717/4190590003\"")
-        buildConfigField("String", "ADMOB_REWARDED_ID", "\"ca-app-pub-7680074184799717/8008389395\"")
-        optimization {
-            enable = true
-            packageScope = setOf("androidx.**", "kotlin.**", "kotlinx.**")
+        release {
+            manifestPlaceholders["admobAppId"] = "ca-app-pub-7680074184799717~5179790931"
+            buildConfigField("String", "ADMOB_BANNER_ID", "\"ca-app-pub-7680074184799717/4190590003\"")
+            buildConfigField("String", "ADMOB_REWARDED_ID", "\"ca-app-pub-7680074184799717/8008389395\"")
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
-    }
     create("staging") {
     initWith(getByName("release"))
+        signingConfig = signingConfigs.getByName("debug")
     manifestPlaceholders["admobAppId"] = "ca-app-pub-3940256099942544~3347511713"
     buildConfigField("String", "ADMOB_BANNER_ID", "\"ca-app-pub-3940256099942544/9214589741\"")
     buildConfigField("String", "ADMOB_REWARDED_ID", "\"ca-app-pub-3940256099942544/5224354917\"")

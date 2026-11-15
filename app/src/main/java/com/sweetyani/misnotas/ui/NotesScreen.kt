@@ -43,6 +43,7 @@ import com.sweetyani.misnotas.ui.theme.DialogCancelButton
 import com.sweetyani.misnotas.ui.theme.appTextFieldColors
 import kotlinx.coroutines.delay
 
+
 @Composable
 fun NotesScreen(
     notes: List<Note>,
