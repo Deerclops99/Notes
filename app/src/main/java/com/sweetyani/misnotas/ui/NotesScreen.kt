@@ -42,7 +42,8 @@ import com.sweetyani.misnotas.data.Note
 import com.sweetyani.misnotas.ui.theme.DialogCancelButton
 import com.sweetyani.misnotas.ui.theme.appTextFieldColors
 import kotlinx.coroutines.delay
-
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 
 @Composable
 fun NotesScreen(
@@ -148,14 +149,31 @@ fun NoteDialog(
     onSave: (String, String) -> Unit,
     onDismiss: () -> Unit
 ) {
-    var title by rememberSaveable { mutableStateOf(initial?.title ?: "") }
-    var content by rememberSaveable { mutableStateOf(initial?.content ?: "") }
-    val titleFocus = remember { FocusRequester() }
+    val initialTitle = initial?.title ?: ""
+    val initialContent = initial?.content ?: ""
 
-    // Abre el teclado en el título
+    // Con el cursor al final del texto
+    var title by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+        mutableStateOf(
+            TextFieldValue(initialTitle, TextRange(initialTitle.length))
+        )
+    }
+    var content by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+        mutableStateOf(
+            TextFieldValue(initialContent, TextRange(initialContent.length))
+        )
+    }
+
+    val titleFocus = remember { FocusRequester() }
+    val contentFocus = remember { FocusRequester() }
+
+    // Nota nueva: foco en el título. Editando: foco en el contenido.
     LaunchedEffect(Unit) {
         delay(100)
-        runCatching { titleFocus.requestFocus() }
+        runCatching {
+            if (initial == null) titleFocus.requestFocus()
+            else contentFocus.requestFocus()
+        }
     }
 
     AlertDialog(
@@ -188,14 +206,16 @@ fun NoteDialog(
                     },
                     minLines = 3,
                     colors = appTextFieldColors(),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusRequester(contentFocus)
                 )
             }
         },
         confirmButton = {
             Button(
-                onClick = { onSave(title.trim(), content.trim()) },
-                enabled = title.isNotBlank()
+                onClick = { onSave(title.text.trim(), content.text.trim()) },
+                enabled = title.text.isNotBlank()
             ) {
                 Text(
                     stringResource(

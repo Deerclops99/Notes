@@ -50,7 +50,8 @@ import com.sweetyani.misnotas.ui.theme.DialogCancelButton
 import com.sweetyani.misnotas.ui.theme.appTextFieldColors
 import com.sweetyani.misnotas.ui.theme.pillTextColor
 import kotlinx.coroutines.delay
-
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 
 @Composable
 fun TodoScreen(
@@ -217,7 +218,14 @@ fun TodoDialog(
     onSave: (String, Boolean) -> Unit,
     onDismiss: () -> Unit
 ) {
-    var text by rememberSaveable { mutableStateOf(initial?.text ?: "") }
+    val initialText = initial?.text ?: ""
+
+    // Con el cursor al final del texto
+    var text by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+        mutableStateOf(
+            TextFieldValue(initialText, TextRange(initialText.length))
+        )
+    }
     var permanent by rememberSaveable {
         mutableStateOf(initial?.permanent ?: false)
     }
@@ -265,8 +273,8 @@ fun TodoDialog(
         },
         confirmButton = {
             Button(
-                onClick = { onSave(text.trim(), permanent) },
-                enabled = text.isNotBlank()
+                onClick = { onSave(text.text.trim(), permanent) },
+                enabled = text.text.isNotBlank()
             ) {
                 Text(
                     stringResource(
