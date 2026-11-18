@@ -44,6 +44,8 @@ import com.sweetyani.misnotas.ui.theme.appTextFieldColors
 import kotlinx.coroutines.delay
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 
 @Composable
 fun NotesScreen(
@@ -186,7 +188,9 @@ fun NoteDialog(
             )
         },
         text = {
-            Column {
+            Column(
+                modifier = Modifier.verticalScroll(rememberScrollState())
+            ) {
                 OutlinedTextField(
                     value = title,
                     onValueChange = { title = it },
@@ -201,10 +205,9 @@ fun NoteDialog(
                 OutlinedTextField(
                     value = content,
                     onValueChange = { content = it },
-                    label = {
-                        Text(stringResource(R.string.notes_content_label))
-                    },
+                    label = { Text(stringResource(R.string.notes_content_label)) },
                     minLines = 3,
+                    maxLines = 6,   // <- el campo deja de crecer y hace scroll por dentro
                     colors = appTextFieldColors(),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -236,3 +239,4 @@ fun NoteDialog(
         }
     )
 }
+
